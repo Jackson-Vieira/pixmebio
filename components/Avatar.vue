@@ -1,6 +1,6 @@
 <script setup>
-const props = defineProps(['path'])
-const { path } = toRefs(props)
+const props = defineProps(['path', 'allowUpload', 'width'])
+const { path, allowUpload, width } = toRefs(props)
 
 const emit = defineEmits(['update:path', 'upload'])
 
@@ -63,11 +63,12 @@ watch(path, () => {
       :src="src"
       alt="Avatar"
       class="avatar image"
-      style="width: 10em; height: 10em;"
+      :style="{width, height: width}"
     />
+
     <div v-else class="avatar no-image" :style="{ height: size, width: size }" />
 
-    <div style="width: 10em; position: relative;">
+    <div style="width: 10em; position: relative;" v-if="allowUpload">
       <label class="button primary block" for="single">
         {{ uploading ? 'Uploading ...' : 'Upload' }}
       </label>

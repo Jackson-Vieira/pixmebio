@@ -6,8 +6,8 @@ const supabase = useSupabaseClient()
 
 const loading = ref(false)
 const username = ref('')
-// const website = ref('')
-const pixKey = ref('')
+const pix_key = ref('')
+const description = ref('')
 const avatar_path = ref('')
 const pix_qrcode_src = ref('')
 
@@ -17,7 +17,7 @@ const { data: profile } = await useAsyncData('profile', async () => {
     loading.value = true
     const { data } = await supabase
         .from('profiles')
-        .select(`username, website, avatar_url`)
+        .select(`username, pix_key, avatar_url, description`)
         .eq('id', user.value.id)
         .single()
 
@@ -38,14 +38,6 @@ async function createQRCode(pixKey: string){
     return await qrCodePix.base64()
 }
 
-
-
-if (profile.value.username) {
-    username.value = profile.value.username
-    // website.value = profile.value.website
-    avatar_path.value = profile.value.avatar_url
-}
-
 async function updateProfile() {
     try {
         loading.value = true
@@ -53,7 +45,7 @@ async function updateProfile() {
         const updates = {
             id: user.value.id,
             username: username.value,
-            // website: website.value,
+            pix_key: pix_key.value,
             avatar_url: avatar_path.value,
             updated_at: new Date(),
         }
@@ -78,37 +70,44 @@ async function signOut() {
     }
 }
 
-
-watch(pixKey, async (newPixKey, _) => {
+// TODO: PUT THIS LOGIC IN A METHOD AND REUSE IN POPULATE USER DATA
+watch(pix_key, async (newPixKey, _) => {
     if(newPixKey){
+        // TODO: make a loading state while the new qrcode is updating (perfumaria)
         pix_qrcode_src.value = await createQRCode(newPixKey)
     }
 })
 
+if (profile.value.username) {
+    username.value = profile.value.username
+    pix_key.value = profile.value.pix_key
+    avatar_path.value = profile.value.avatar_url
+    description.value = profile.value.description
+}
+
 </script><template>
     <form class="form-widget" @submit.prevent="updateProfile">
 
-        <Avatar v-model:path="avatar_path" @upload="updateProfile" :size="10" />
-
-        <img v-if="pixKey" :src="pix_qrcode_src" alt="Red dot" />
+        <Avatar v-model:path="avatar_path" @upload="updateProfile" :allow-upload="true" :size="10" />
 
         <div>
             <label for="email">Email (NÃO FICARÁ VISÍVEL NA SUA PÁGINA)</label>
             <input id="email" type="text" :value="user.email" disabled />
         </div>
+
         <div>
             <label for="username">Username</label>
-            <input id="username" type="text" v-model="username" />
+            <input id="username" placeholder="/seusuario"type="text" v-model="username" />
         </div>
 
         <div>
             <label for="pixKey">Pix Key</label>
-            <input id="pixKey" type="url" v-model="pixKey" />
+            <input id="pixKey" type="url" v-model="pix_key" />
         </div>
 
         <div>
             <label for="description">Descrição</label>
-            <textarea placeholder="Escreva um pouco sobre você aqui" />
+            <textarea placeholder="Escreva um pouco sobre você aqui" v-model="description" />
         </div>
 
         <div>
