@@ -321,7 +321,7 @@ button.primary,
 }
 
 .avatar.image {
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .avatar.no-image {

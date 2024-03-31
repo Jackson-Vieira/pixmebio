@@ -1,7 +1,7 @@
 <template>
 <div class="profile__card">
     <div class="profile__info">
-        <Avatar :path="profile.avatar_url" :allow-upload="false" width="4rem"/>
+        <Avatar :path="profile.avatar_url" :allow-upload="false" width="5rem"/>
         <strong>{{ profile.username }}</strong>
         <p>{{ profile.description }}</p>
     </div>

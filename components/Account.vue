@@ -46,6 +46,7 @@ async function updateProfile() {
             id: user.value.id,
             username: username.value,
             pix_key: pix_key.value,
+            description: description.value,
             avatar_url: avatar_path.value,
             updated_at: new Date(),
         }
@@ -102,7 +103,7 @@ if (profile.value.username) {
 
         <div>
             <label for="pixKey">Pix Key</label>
-            <input id="pixKey" type="url" v-model="pix_key" />
+            <input id="pixKey" type="text" v-model="pix_key" />
         </div>
 
         <div>

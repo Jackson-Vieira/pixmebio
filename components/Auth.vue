@@ -21,7 +21,7 @@ const handleLogin = async () => {
 <template>
     <form class="row flex-center flex" @submit.prevent="handleLogin">
         <div class="col-6 form-widget">
-            <h1 class="header">Daily ToDo</h1>
+            <h1 class="header">PIXMEBIO</h1>
             <p class="description">
                 Faça o login com seu email e senha
             </p>
@@ -38,7 +38,7 @@ const handleLogin = async () => {
                     id="email"
                     :disabled="loading" 
                     class="button block"
-                    :value="loading ? 'Loading' : 'Send magic link'"
+                    :value="loading ? 'Entrando...' : 'Entrar'"
                     type="submit" 
                 />
             </div>
