@@ -7,7 +7,7 @@
     </div>
     <footer>
         <img :src="pix_key_src" alt="Pix QR code" width="250" height="250" />
-        <button class="button__copy_qrcode" type="button" @click="handleCopyPix">Copiar código QR</button>
+        <button v-if="isSupported"class="button__copy_qrcode" type="button" @click="handleCopyPix">Copiar código QR</button>
     </footer>
 </div>
 </template>
@@ -35,13 +35,14 @@ const { data: profile } = await useAsyncData('profile', async () => {
             .select(`username, pix_key, avatar_url, description`)
             .eq('username', params.username)
             .single()
+
     
         if(error) throw error
 
         return data
 
     } catch(err) {
-        console.log(err)
+        console.err(err)
     } finally {
         loading.value = false
     }

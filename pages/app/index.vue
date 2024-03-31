@@ -1,9 +1,11 @@
-<script setup lang="ts">
+<script setup>
 import { QrCodePix } from 'qrcode-pix';
 
+definePageMeta({
+  middleware: ["auth"],
+});
+
 const supabase = useSupabaseClient()
-
-
 const loading = ref(false)
 const username = ref('')
 const pix_key = ref('')
@@ -26,7 +28,7 @@ const { data: profile } = await useAsyncData('profile', async () => {
 })
 
 
-async function createQRCode(pixKey: string){
+async function createQRCode(pixKey){
     const qrCodePix = QrCodePix({
         version: '01',
         key: pixKey, // PIX KEY
@@ -64,6 +66,7 @@ async function signOut() {
         loading.value = true
         const { error } = await supabase.auth.signOut()
         if (error) throw error
+        await navigateTo("/login")
     } catch (error) {
         alert(error.message)
     } finally {

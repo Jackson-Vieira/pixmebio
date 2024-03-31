@@ -11,6 +11,7 @@ const handleLogin = async () => {
         loading.value = true
         const { error } = await supabase.auth.signInWithPassword({ email: email.value, password: password.value })
         if (error) throw error
+        await navigateTo("/app")
     } catch (error) {
         alert(error.message)
     } finally {
