@@ -1,5 +1,8 @@
 <template>
     PIX ME BIO
 </template>
-<script setup>
+<script lang="ts" setup>
+useHead({
+    title: "Compartilhamento seguro e elegante do seu PIX"
+})
 </script>

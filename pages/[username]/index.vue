@@ -85,6 +85,17 @@ function handleCopyPix(){
    copy(pix_key_base64.value)
 }
 
+useHead({
+    title: () => `${profile.value.username}`
+})
+
+useSeoMeta({
+    title: () => `${profile.value.username}`,
+    ogTitle: () => `Pixmebio - ${profile.value.username}`,
+    description: () => profile.value.description,
+    ogDescription: () => profile.value.description
+})
+
 </script>
 <style scoped>
 

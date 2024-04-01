@@ -1,9 +1,18 @@
 <script setup>
+import { useClipboard } from '@vueuse/core'
+
 definePageMeta({
   middleware: ["auth"],
 });
 
+useHead({
+    title: "Perfil"
+})
+
 const supabase = useSupabaseClient()
+
+const { copy, isSupported, copied  } = useClipboard()
+
 const loading = ref(false)
 const username = ref('')
 const email = ref('')
@@ -61,8 +70,11 @@ async function signOut() {
     }
 }
 
+function handleCopyLink(){
+    copy(`${window.location.origin}/${profile.value.username}`)
+}
 
-if (profile.value.username) {
+if (profile.value) {
     username.value = profile.value.username
     pix_key.value = profile.value.pix_key
     avatar_path.value = profile.value.avatar_url
@@ -100,7 +112,13 @@ if (profile.value.username) {
         </div>
 
         <div>
-            <button type="button" class="button block" @click="signOut">
+            <button :disabled="isSupported" type="button" class="button block" @click="handleCopyLink">
+                {{ copied ? 'Copiado!' : 'Copiar link do perfil social' }}
+            </button>
+        </div>
+
+        <div>
+            <button type="button" class="button block logout" @click="signOut">
                 Logout
             </button>
         </div>

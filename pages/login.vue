@@ -2,6 +2,10 @@
 
 const supabase = useSupabaseClient()
 
+useHead({
+    title: "Login"
+})
+
 const loading = ref(false)
 
 const handleLogin = async () => {
