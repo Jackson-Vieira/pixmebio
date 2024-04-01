@@ -11,10 +11,12 @@ const loading = ref(false)
 const handleLogin = async () => {
     try {
         loading.value = true
+        const redirectUrl = `${window.location.origin}/app`
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/app`
+                redirectTo: redirectUrl
             }
         })
         if (error) throw error
