@@ -7,7 +7,8 @@
     </div>
     <footer>
         <img :src="pix_key_src" alt="Pix QR code" width="250" height="250" />
-        <button v-if="isSupported"class="button__copy_qrcode" type="button" @click="handleCopyPix">Copiar código QR</button>
+        <input type="text" :value="pix_key_base64">
+        <button class="button__copy_qrcode" type="button" @click="handleCopyPix" :disabled="isSupported">Copiar código</button>
     </footer>
 </div>
 </template>
@@ -62,7 +63,7 @@ async function createQRCode(pixKey){
         key: pixKey,
         name: "any",
         city: "any",
-        value: 1.0
+        value: 0.0
     });
     
     const base64 = await qrCodePix.base64()
