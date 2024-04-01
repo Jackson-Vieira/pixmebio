@@ -3,17 +3,17 @@
 const supabase = useSupabaseClient()
 
 const loading = ref(false)
-const email = ref('')
-const password = ref('')
 
 const handleLogin = async () => {
     try {
         loading.value = true
-        const { error } = supabase.auth.signInWithOAuth({
-            provider: 'google'
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/app`
+            }
         })
         if (error) throw error
-        await navigateTo("/app")
     } catch (error) {
         alert(error.message)
     } finally {

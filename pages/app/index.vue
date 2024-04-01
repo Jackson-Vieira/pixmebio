@@ -8,6 +8,7 @@ definePageMeta({
 const supabase = useSupabaseClient()
 const loading = ref(false)
 const username = ref('')
+const email = ref('')
 const pix_key = ref('')
 const description = ref('')
 const avatar_path = ref('')
@@ -87,6 +88,7 @@ if (profile.value.username) {
     pix_key.value = profile.value.pix_key
     avatar_path.value = profile.value.avatar_url
     description.value = profile.value.description
+    email.value = user.email
 }
 
 </script><template>
@@ -96,7 +98,7 @@ if (profile.value.username) {
 
         <div>
             <label for="email">Email (NÃO FICARÁ VISÍVEL NA SUA PÁGINA)</label>
-            <input id="email" type="text" :value="user.email" disabled />
+            <input id="email" type="text" v-model="email" disabled />
         </div>
 
         <div>
