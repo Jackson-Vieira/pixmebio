@@ -14,7 +14,7 @@ const handleLogin = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `https://pixmebio.vercel.app//app`
+                redirectTo: `${window.location.origin}/app`
             }
         })
         if (error) throw error
