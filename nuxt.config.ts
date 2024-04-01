@@ -4,9 +4,5 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   supabase: {
     redirect: false,
-    redirectOptions: {
-      login: '/login',
-      callback: '/app'
-    }
   }
 })
