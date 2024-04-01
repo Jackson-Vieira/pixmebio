@@ -1,5 +1,7 @@
 <template>
-<div class="profile__card">
+<div v-if="loading">Carregando...</div>
+<div v-else-if="error">{{ error }}</div>
+<div v-else class="profile__card">
     <div class="profile__info">
         <Avatar :path="profile.avatar_url" :allow-upload="false" width="5rem"/>
         <strong>{{ profile.username }}</strong>
@@ -8,7 +10,9 @@
     <footer>
         <img :src="pix_key_src" alt="Pix QR code" width="250" height="250" />
         <input type="text" :value="pix_key_base64">
-        <button class="button__copy_qrcode" type="button" @click="handleCopyPix" :disabled="isSupported">Copiar código</button>
+        <button class="button__copy_qrcode" type="button" @click="handleCopyPix" :disabled="isSupported">
+            {{ copied ? 'Copiado!' : 'Copiar código' }}
+        </button>
     </footer>
 </div>
 </template>
@@ -17,11 +21,12 @@
 import { QrCodePix } from 'qrcode-pix';
 import { useClipboard } from '@vueuse/core'
 
+const error = useError()
 const loading = ref(false)
 const pix_key_src = ref('')
 const pix_key_base64 = ref('')
 
-const { copy, isSupported } = useClipboard({ pix_key_base64 })
+const { copy, isSupported, copied  } = useClipboard({ pix_key_base64 })
 const { params } = useRoute()
 
 const supabase = useSupabaseClient()
@@ -35,15 +40,19 @@ const { data: profile } = await useAsyncData('profile', async () => {
             .from('profiles')
             .select(`username, pix_key, avatar_url, description`)
             .eq('username', params.username)
-            .single()
+            .maybeSingle()
 
-    
+        if (!data) throw showError({statusCode: 404, statusMessage: "Não foi encontrado nenhum registro com esse nome de usuário"})
+        
         if(error) throw error
 
         return data
 
     } catch(err) {
-        console.err(err)
+        error.value = err
+        if (err.statusCode == 404){
+            navigateTo('/')
+        }
     } finally {
         loading.value = false
     }
@@ -51,7 +60,7 @@ const { data: profile } = await useAsyncData('profile', async () => {
     loading.value = false
 })
 
-if (profile.value.pix_key){
+if (profile.value){
     const {base64, payload} = await createQRCode(profile.value.pix_key)
     pix_key_base64.value = payload
     pix_key_src.value = base64
