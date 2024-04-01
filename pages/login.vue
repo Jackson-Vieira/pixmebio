@@ -9,7 +9,9 @@ const password = ref('')
 const handleLogin = async () => {
     try {
         loading.value = true
-        const { error } = await supabase.auth.signInWithPassword({ email: email.value, password: password.value })
+        const { error } = supabase.auth.signInWithOAuth({
+            provider: 'google'
+        })
         if (error) throw error
         await navigateTo("/app")
     } catch (error) {
@@ -20,29 +22,20 @@ const handleLogin = async () => {
 }
 </script>
 <template>
-    <form class="row flex-center flex" @submit.prevent="handleLogin">
-        <div class="col-6 form-widget">
+    <form class="row flex-center flex login__form" @submit.prevent="handleLogin">
+        <div class="col-6">
             <h1 class="header">PIXMEBIO</h1>
             <p class="description">
-                Faça o login com seu email e senha
+                Comece agora mesmo com sua conta do Google. Crie seu perfil!
             </p>
-            <div>
-                <label for="email">Email</label>
-                <input class="inputField" id="email" type="email" placeholder="Seu email" v-model="email" />
-            </div>
-            <div>
-                <label for="email">Password</label>
-                <input class="inputField" id="password" type="password" placeholder="*****" v-model="password" />
-            </div>
-            <div>
-                <input 
-                    id="email"
-                    :disabled="loading" 
-                    class="button block"
-                    :value="loading ? 'Entrando...' : 'Entrar'"
-                    type="submit" 
-                />
-            </div>
+            <button 
+                :disabled="loading" 
+                class="button block"
+                type="submit" 
+            >
+            <img src="../public/google.svg" alt="Google logo" width="28" height="28">
+            {{ loading ? 'Entrando...' : 'Entrar com Google' }}
+            </button>
         </div>
     </form>
 </template>

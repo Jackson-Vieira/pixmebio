@@ -426,3 +426,18 @@ button.primary,
     animation: spin 1s linear infinite;
     filter: invert(1);
 }
+
+.login__form {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login__form .button[type='submit'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
